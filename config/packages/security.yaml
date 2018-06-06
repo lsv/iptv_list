@@ -1,0 +1,23 @@
+security:
+    encoders:
+        Symfony\Component\Security\Core\User\User:
+            algorithm: argon2i
+
+    providers:
+        in_memory:
+            memory:
+                users:
+                    '%env(APP_USER_NAME)%':
+                        password: '%env(APP_USER_PASSWORD)%'
+                        roles: 'ROLE_USER'
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            http_basic: ~
+
+    access_control:
+        - { path: ^/, roles: ROLE_USER }

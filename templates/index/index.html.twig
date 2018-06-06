@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello!{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h1>
+            Channel overview
+            <small class="float-right"><a href="{{ path('index_upload') }}">Upload new channels</a></small>
+        </h1>
+        <div class="row">
+            {% set channel_col = '-8' %}
+            <div class="col{{ channel_col }}">
+                <div class="card">
+                    <div class="card-header"><h3>Channels</h3></div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Channel</th>
+                            <th>Links</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for channel in channels %}
+                            <tr>
+                                <td>{{ channel.name }}</td>
+                                <td>
+                                    {% for link in channel.links %}
+                                        <div>
+                                            <button class="clipboard btn btn-info" data-clipboard-text="{{ link.url|e }}">Copy url</button>
+                                        </div>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card">
+                    <div class="card-header"><h3>Select country</h3></div>
+                    <div class="card-body">
+                        <form method="get">
+                            <label>
+                                <select name="country" class="form-control" onchange="this.form.submit()">
+                                    {% for country in countries %}
+                                        {% set selected = app.request.query.get('country', 'DK') == country.country ? 'selected' : '' %}
+                                        <option {{ selected }} value="{{ country.country }}">{{ country.country }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        new ClipboardJS('.clipboard');
+    </script>
+{% endblock %}
